@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://rowandish.github.io/paoloalbert-blog/sitemap.xml

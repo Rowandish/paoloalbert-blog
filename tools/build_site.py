@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 from urllib.request import Request, urlopen
 
 from lxml import html as lxml_html
@@ -34,6 +34,8 @@ SITE_TITLE = "CHIMICA sperimentale"
 SITE_SUBTITLE = "Esperienze in home-lab: considerazioni di chimica sperimentale e altro"
 AUTHOR = "paoloalbert"
 ORIGINAL_BLOG = "https://blog.libero.it/paoloalbert/"
+SITE_URL = "https://rowandish.github.io/paoloalbert-blog/"
+BUILD_DATE = datetime.now().date().isoformat()
 
 
 def _build_mojibake_map() -> dict[str, str]:
@@ -161,6 +163,10 @@ def short_excerpt(value: str, limit: int = 190) -> str:
     if len(text) <= limit:
         return text
     return text[: limit - 1].rsplit(" ", 1)[0] + "..."
+
+
+def absolute_url(path: str = "") -> str:
+    return urljoin(SITE_URL, path)
 
 
 def read_csv_posts() -> dict[str, Post]:
@@ -401,9 +407,16 @@ def page_shell(
     body: str,
     css_href: str,
     js_href: str | None = None,
+    canonical_url: str | None = None,
+    extra_head: str = "",
     body_class: str = "",
 ) -> str:
     script = f'<script src="{js_href}" defer></script>' if js_href else ""
+    canonical = (
+        f'<link rel="canonical" href="{html.escape(canonical_url, quote=True)}">'
+        if canonical_url
+        else ""
+    )
     return textwrap.dedent(
         f"""\
         <!doctype html>
@@ -413,6 +426,8 @@ def page_shell(
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <title>{html.escape(title)}</title>
           <meta name="description" content="{html.escape(description)}">
+          {canonical}
+          {extra_head}
           <link rel="stylesheet" href="{css_href}">
           {script}
         </head>
@@ -488,6 +503,26 @@ def render_article(post: Post, posts: dict[str, Post], ordered: list[Post]) -> s
     )
 
     original_url = f"{ORIGINAL_BLOG}{post.post_id}.html"
+    canonical_url = absolute_url(f"src/{post.filename}")
+    structured_data: dict[str, object] = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": post.excerpt,
+        "url": canonical_url,
+        "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
+        "datePublished": post.date.isoformat(),
+        "dateModified": BUILD_DATE,
+        "author": {"@type": "Person", "name": AUTHOR},
+        "isPartOf": {"@type": "Blog", "name": SITE_TITLE, "url": absolute_url()},
+    }
+    if post.first_image:
+        structured_data["image"] = [absolute_url(post.first_image)]
+    article_schema = (
+        '<script type="application/ld+json">'
+        + json.dumps(structured_data, ensure_ascii=False)
+        + "</script>"
+    )
     article_body = textwrap.dedent(
         f"""\
         {site_header("../")}
@@ -516,6 +551,8 @@ def render_article(post: Post, posts: dict[str, Post], ordered: list[Post]) -> s
         description=post.excerpt,
         body=article_body,
         css_href="../assets/style.css",
+        canonical_url=canonical_url,
+        extra_head=article_schema,
         body_class="article-page",
     )
 
@@ -615,6 +652,7 @@ def render_home(posts: list[Post]) -> str:
         body=body,
         css_href="assets/style.css",
         js_href="assets/site.js",
+        canonical_url=absolute_url(),
         body_class="home-page",
     )
 
@@ -647,6 +685,7 @@ def render_archive(posts: list[Post]) -> str:
         body=body,
         css_href="assets/style.css",
         js_href="assets/site.js",
+        canonical_url=absolute_url("archive.html"),
         body_class="archive-page",
     )
 
@@ -665,6 +704,7 @@ def render_src_index() -> str:
         description="Indice articoli",
         body=body,
         css_href="../assets/style.css",
+        canonical_url=absolute_url("src/"),
     )
 
 
@@ -1351,6 +1391,59 @@ def write_js() -> None:
     )
 
 
+def sitemap_entry(
+    *,
+    path: str,
+    lastmod: str,
+    changefreq: str | None = None,
+    priority: str | None = None,
+    image_path: str | None = None,
+) -> str:
+    lines = [
+        "  <url>",
+        f"    <loc>{html.escape(absolute_url(path), quote=True)}</loc>",
+        f"    <lastmod>{html.escape(lastmod)}</lastmod>",
+    ]
+    if changefreq:
+        lines.append(f"    <changefreq>{changefreq}</changefreq>")
+    if priority:
+        lines.append(f"    <priority>{priority}</priority>")
+    if image_path:
+        lines.extend(
+            [
+                "    <image:image>",
+                f"      <image:loc>{html.escape(absolute_url(image_path), quote=True)}</image:loc>",
+                "    </image:image>",
+            ]
+        )
+    lines.append("  </url>")
+    return "\n".join(lines)
+
+
+def render_sitemap(posts: list[Post]) -> str:
+    entries = [
+        sitemap_entry(path="", lastmod=BUILD_DATE, changefreq="weekly", priority="1.0"),
+        sitemap_entry(path="archive.html", lastmod=BUILD_DATE, changefreq="weekly", priority="0.9"),
+    ]
+    for post in sorted(posts, key=lambda item: item.number):
+        entries.append(
+            sitemap_entry(
+                path=f"src/{post.filename}",
+                lastmod=BUILD_DATE,
+                changefreq="monthly",
+                priority="0.8",
+                image_path=post.first_image,
+            )
+        )
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+        'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+        + "\n".join(entries)
+        + "\n</urlset>\n"
+    )
+
+
 def write_support_files(posts: list[Post]) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     (DATA_DIR / "posts.json").write_text(
@@ -1375,12 +1468,17 @@ def write_support_files(posts: list[Post]) -> None:
         ),
         encoding="utf-8",
     )
-    (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+    (ROOT / "sitemap.xml").write_text(render_sitemap(posts), encoding="utf-8")
+    (ROOT / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\n\nSitemap: {absolute_url('sitemap.xml')}\n",
+        encoding="utf-8",
+    )
     (ROOT / "404.html").write_text(
         page_shell(
             title=f"Pagina non trovata · {SITE_TITLE}",
             description="Pagina non trovata",
             css_href="assets/style.css",
+            extra_head='<meta name="robots" content="noindex, follow">',
             body=textwrap.dedent(
                 """\
                 <main class="redirect-page">
@@ -1443,6 +1541,7 @@ def main() -> None:
             encoding="utf-8",
         )
         alias = SRC_DIR / f"{post.post_id}.html"
+        alias_canonical = absolute_url(f"src/{post.filename}")
         alias.write_text(
             textwrap.dedent(
                 f"""\
@@ -1451,7 +1550,8 @@ def main() -> None:
                 <head>
                   <meta charset="utf-8">
                   <meta http-equiv="refresh" content="0; url={post.filename}">
-                  <link rel="canonical" href="{post.filename}">
+                  <meta name="robots" content="noindex, follow">
+                  <link rel="canonical" href="{alias_canonical}">
                   <title>{html.escape(post.title)}</title>
                 </head>
                 <body><p><a href="{post.filename}">{html.escape(post.title)}</a></p></body>
