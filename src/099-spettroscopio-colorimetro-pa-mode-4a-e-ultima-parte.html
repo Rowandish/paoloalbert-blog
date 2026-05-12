@@ -1,0 +1,51 @@
+        <!doctype html>
+        <html lang="it">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Spettroscopio/colorimetro PA-mode (4Â° e ultima parte) · CHIMICA sperimentale</title>
+          <meta name="description" content="Dopo essere stato preventivamente testato al banco mentre cresceva (ved. foto nel post precedente), ho slegato dal lettino il circuito &quot;piccolo Frankestein&quot; liberandolo dalla miriade di...">
+          <link rel="stylesheet" href="../assets/style.css">
+
+        </head>
+        <body class="article-page">
+                <header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">PA</span>
+    <span>
+      <strong>CHIMICA sperimentale</strong>
+      <small>Esperienze in home-lab: considerazioni di chimica sperimentale e altro</small>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <a href="../index.html">Home</a>
+    <a href="../archive.html">Archivio</a>
+    <a href="https://blog.libero.it/paoloalbert/">Originale Libero</a>
+  </nav>
+</header>
+
+        <main class="article-shell">
+          <article class="article">
+            <header class="article-head">
+              <a class="back-link" href="../archive.html">Archivio</a>
+              <p class="article-meta">Post n. 99 · 19/04/2011 23:24 · <a href="https://blog.libero.it/paoloalbert/10132414.html">link originale</a></p>
+              <h1>Spettroscopio/colorimetro PA-mode (4Â° e ultima parte)</h1>
+            </header>
+            <div class="post-body">
+              <p style="text-align: justify;">Dopo essere stato preventivamente testato al banco mentre cresceva (ved. foto nel post precedente), ho slegato dal lettino <span style="color: #ff9900;"><span style="color: #888888;">il circuito</span> "piccolo Frankestein"</span> liberandolo dalla miriade di fili che lo alimentavano e l'ho piazzato  in una scatoletta che avevo, in modo che fosse indipendente e potesse cominciare a muoversi autonomamente facendo il lavoro che doveva fare.<br>Sul pannello frontale dell'apparecchio ci sono tutti i comandi di regolazione dell'accrocco, così si può smanettare a piacere senza fare acrobazie.<br>Oltre all'interruttore di accensione e al relativo LED, si vedono:<br><br><span style="color: #ffffff;">- il milliamperometro per le misure relative di assorbanza<br>- la regolazione della corrente del LED di illuminazione<br>- la regolazione dell'offset (azzeramento)<br>- la regolazione dell'amplificazione dei due stadi OP Amp <br>- l'uscita per l'alimentazione del LED di illuminazione<br>- l'entrata del segnale e di alimentazione del fototransistor <br>- l'attenuatore per lo strumento di uscita</span><br><br>Lo schema come detto è volutamente semplice (era il requisito fondamentale che mi ero imposto), quindi la difficoltà maggiore è stata come al solito la realizzazione meccanica ed il cablaggio del tutto, dato che occorre fare un lavoretto che sia anche esteticamente presentabile.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/a0786d8ec6-XILnw1Ya_o.jpg" alt="Colorimetro 2" width="380" height="285" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;">Le foto, fatte in qualche modo di sera, rendono un'idea del marchingegno finito durante una misura sotto descritta.</p><p style="text-align: center;"><img src="../img/69913a0175-KPt6O9ZH_o.jpg" alt="Colorimetro 3" width="350" height="263" loading="lazy" decoding="async" /></p><p style="text-align: center;"> </p><p style="text-align: justify;"><span style="color: #ffff99;">Prove di assorbimento</span><br><br>Il test iniziale è stato fatto (<span style="text-decoration: underline;">illuminando solo a infrarosso</span>) diverse soluzioni di <span style="color: #ff6600;">dicromato di potassio K<sub>2</sub>Cr<sub>2</sub>O<sub>7</sub></span> e di <span style="color: #33cccc;">cloruro di rame CuCl<sub>2</sub></span>. <br>Il dicromato (pur se intensamente arancio) porta a irrisorie variazioni di assorbimento in funzione della concentrazione; tutto l'opposto invece col cloruro di rame (impercettibilmente azzurrino) nelle medesime condizioni: <span style="text-decoration: underline;"><span style="color: #ffffff;">1 g/l</span> di <span style="color: #33cccc;">CuCl<sub>2</sub></span> fornisce in uscita un notevolissimo assorbimento</span>. (Ho voluto cercare il limite del sistema per questo catione a IR e ho visto che mi rivela con certezza meno di <span style="color: #33cccc;"><span style="color: #ffffff;">20 mg/l</span> <span style="color: #c0c0c0;">di</span> Cu++</span>).<br><br>La prova nelle foto si riferisce al test di assorbimento sempre del <span style="color: #ff6600;">K<sub>2</sub>Cr<sub>2</sub>O<sub>7</sub></span>, ma stavolta <span style="color: #cc99ff;"><span style="text-decoration: underline;">nel vicino ultravioletto (400 nm</span>)</span>.<br>Cambiando la lunghezza d'onda stavolta il colpo di scena è notevole: mentre nell'IR l'indice non si muoveva nemmeno con una soluzione più arancio della Fanta, nell'UV è sufficiente <span style="color: #ffffff;">1</span><strong><span style="color: #ffffff;"> </span></strong><span style="color: #ffffff;">ppm (!)</span> di <span style="color: #ff6600;">dicromato</span> per portare l'indice dello strumento dal fondo scala (50) al valore 10! <br>Inutile dire che a questa estrema diluizione la soluzione è perfettamente trasparente e incolora all'occhio umano.<br><br>Un'altra prova significativa e di grande soddisfazione è stato verificare l'assorbimento <span style="color: #00ff00;">nel verde (530 nm)</span> dello <span style="color: #ff00ff;">ione permanganato MnO4-</span> <br>Questo anione ha un'elevatissimo potere colorante nel viola (le sue soluzioni diluite sono di un meraviglioso violetto) e quindi, secondo il Circolo di Ostwald dovrebbe assorbire nel verde... andiamo a verificare.<br>Ho dovuto diluire, diluire, e ancora diluire per raggiungere il limite di sensibilità del sistema: il mio aggeggio distingue chiaramente tra l'acqua e una sol. <span style="color: #ffffff;">normal/centomillesima!</span> di <span style="color: #ff00ff;">permanganato KMnO4</span>, naturalmente del tutto incolora.<br><br>E così via... molto irregolarmente le prove sono ancora in corso; mi propongo di fare quelle dei sali ferrici <span style="color: #ff0000;">tiocianato</span> e <span style="color: #00ccff;">ferrocianuro</span> (rispettivamente nel blù e nel giallo), di alcune sostanze organiche, di altri cationi non ancora visti e di quant'altre la fantasia suggerirà nei ritagli di tempo.<br><br>La sensibilità potrebbe ovviamente aumentare avendo la possibilità di variare "in continuo" la lunghezza d'onda dell'illuminazione, poichè <span style="color: #99cc00;">in genere l'assorbimento avviene per bande e per picchi</span>, e non è detto che la frequenza del mio LED illuminatore cada proprio sul picco massimo... anzi è del tutto improbabile. Ma variare lambda in continuo vorrebbe dire usare un monocromatore, e <span style="text-decoration: underline;">allora l'apparecchio non sarebbe più il giocattolino che è</span>.<br><br><span style="color: #c0c0c0;">Per concludere, voglio anche ringraziare il <span style="color: #ffcc00;">dott. Lorenzo M.</span>, che mi ha  fornito dei preziosi suggerimenti e preparato una bella tabella colorimetrica sperimentandola personalmente con apparecchi seri: tutto ciò mi è stato di notevole ausilio per indirizzarmi alla "<span style="color: #00ffff;">luce</span>" (è proprio il caso di dire...) con cui lavorare.</span></p>
+            </div>
+          </article>
+
+          <nav class="article-nav" aria-label="Articoli precedente e successivo">
+            <a class="article-nav-link prev" href="098-spettroscopio-colorimetro-pa-mode-3a-parte.html"><small>Precedente</small><strong>Spettroscopio/colorimetro PA-mode (3Â° parte)</strong></a>
+            <a class="article-nav-link next" href="100-i-don-t-know-how-to-love-him.html"><small>Successivo</small><strong>I don&#x27;t know how to love him</strong></a>
+          </nav>
+        </main>
+        <footer class="site-footer">
+  <p>Archivio statico di <strong>CHIMICA sperimentale</strong>, migrato da Libero Blog.</p>
+  <p><a href="../index.html">Home</a> · <a href="../archive.html">Archivio</a></p>
+</footer>
+
+
+        </body>
+        </html>

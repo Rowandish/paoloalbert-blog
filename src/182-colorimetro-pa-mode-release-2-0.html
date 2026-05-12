@@ -1,0 +1,51 @@
+        <!doctype html>
+        <html lang="it">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Colorimetro PA mode, release 2.0 · CHIMICA sperimentale</title>
+          <meta name="description" content="I lettori più affezionati di questo blog ricorderanno che nei post dal 96 al 99 si parlò di un &quot; C O L O R I M E T R O &quot; che avevo costruito quasi per gioco, in una delle mie alternanze...">
+          <link rel="stylesheet" href="../assets/style.css">
+
+        </head>
+        <body class="article-page">
+                <header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">PA</span>
+    <span>
+      <strong>CHIMICA sperimentale</strong>
+      <small>Esperienze in home-lab: considerazioni di chimica sperimentale e altro</small>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <a href="../index.html">Home</a>
+    <a href="../archive.html">Archivio</a>
+    <a href="https://blog.libero.it/paoloalbert/">Originale Libero</a>
+  </nav>
+</header>
+
+        <main class="article-shell">
+          <article class="article">
+            <header class="article-head">
+              <a class="back-link" href="../archive.html">Archivio</a>
+              <p class="article-meta">Post n. 182 · 08/06/2012 23:29 · <a href="https://blog.libero.it/paoloalbert/11370150.html">link originale</a></p>
+              <h1>Colorimetro PA mode, release 2.0</h1>
+            </header>
+            <div class="post-body">
+              <p style="text-align: justify;">I lettori più affezionati di questo blog ricorderanno che nei post dal 96 al 99 si parlò di un "<span style="color: #cc99ff;">C O <span style="color: #3366ff;">L O </span></span><span style="color: #00ccff;"><span style="color: #00ff00;">R I </span></span><span style="color: #ffff00;">M E </span><span style="color: #ff0000;">T R O</span>" che avevo costruito quasi per gioco, in una delle mie alternanze ricorrenti tra hobby chimico ed hobby elettronico.<br>Non rifaccio qui tutto il discorso, ma rimando eventualmente a quelle pagine con questo <a href="096-spettroscopio-colorimetro-pa-mode-1-parte.html" target="_blank">link</a>.<br><br>Il punto più debole della prima versione dell'apparecchio era la <span style="color: #ff00ff;">celletta di misura</span>; in questa viene inserito il campione da analizzare, sotto forma di una soluzione più o meno colorata.<br>Quella costruita a suo tempo era veramente troppo rudimentale e poco affidabile ed è servita solo come verifica del funzionamento di principio dello strumento, con poche possibilità di eseguire qualche misura degna di questo nome.<br><br>Ora ho ricostruito la celletta in maniera leggermente diversa, con più cura e con dimensioni adeguate a contenere esattamente una cuvetta da 10 mm per spettrofotometria (non quelle costosissime in quarzo, ovviamente!).</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/eb7bc82cc8-E9qHH2JX_o.jpg" alt="Celletta nuova" width="350" height="263" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;">Le due "protuberanze" in tubetto di rame che si vedono nell'immagine contengono rispettivamente un <span style="color: #ffff00;">diodo LED di illuminazione</span> (a destra) <span style="color: #ff99cc;">ed un fototransistor di lettura</span> (a sinistra).<br><br>La luce emessa dal LED (di una certa lunghezza d'onda) è costretta ad attraversare il campione posto nel mezzo ed il raggio luminoso uscente viene captato dal fotoTR, il quale produce un segnale che è mandato poi al resto del circuito.<br>E' intuitivo pensare che <span style="color: #ffffff;">il raggio luminoso "uscente" sarà tanto più attenuato tanto maggiore sarà la concentrazione del liquido colorato attraversato</span>; meno intuitivo è il fatto che<span style="color: #ffcc99;"> l'attenuazione non è affatto uguale per tutte le lunghezze d'onda della luce</span> (quindi per tutti i colori) ma ogni sostanza ha una curva di attenuazione specifica, che varia moltissimo in funzione di questa lunghezza d'onda.<br><br>Ecco per esempio qui sotto il grafico che rappresenta "l'assorbanza" del <span style="color: #00ccff;">blù di metilene</span> in funzione del colore incidente: mentre nel viola-blù l'assorbimento è minimo, nel rosso cupo esso aumenta di circa <span style="color: #ffffff;">70mila volte</span>.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/7f9c5f64c5-WJlt3EMe_o.jpg" alt="Assorbimento blù metilene" width="300" height="258" loading="lazy" decoding="async" /></p><p style="text-align: justify;"><br>Ciò può essere sfruttato per misurare per esempio concentrazioni incognite di sostanze con il metodo spettrofotometrico (ved. altrove per chi vuole approfondire).<br>Ho testato il mio apparecchietto con alcuni cationi e anioni colorati ed anche proprio col <span style="color: #00ccff;">blù di metilene</span>, per il quale esso  sembra avere un particolare feeling... con i risultati che si vedono nel sottostante grafico.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/0a0bc0eec8-sPG1pl2l_o.jpg" alt="Colorimetro metilene" width="400" height="201" loading="lazy" decoding="async" /></p><p style="text-align: justify;"><br>In ascisse del grafico c'è la <span style="color: #00ccff;">concentrazione in mg/l</span> di sostanza ed in ordinate <span style="color: #ffff00;">la lettura al milliamperometro</span>, in una scala arbitraria da 0 a 50. <br>L'illuminazione, in accordo con quanto detto sopra, è stata fatta nel<span style="color: #ff0000;"><strong> </strong>rosso a 630 nm</span>.<br>Mi ha stupito l'estrema sensibilità verso questo (potentissimo) colorante, dato che possono essere misurate quantità dell'ordine di frazioni di mg per litro, che corrispondono per esempio a soluzioni molar-milionesime o <span style="color: #ccffcc;">molar-decimilionesime</span><span style="color: #ccffcc;">!</span><br>Questa è la massima sensibilità che ho finora verificato per lo strumento, se mi è concesso questo termine.</p><p><span style="text-align: justify;">Naturalmente tutto questo è stato fatto per gioco (vogliamo essere più generosi? Diciamo allora per ricerca personale...) e non vi è nessuna velleità di misurazioni quantitative nè di impiego pratico di questo "colorimetro alla mia maniera".</span></p><p style="text-align: justify;">Ma rimane molto forte e impagabile, questa sì, la soddisfazione di aver fatto (e imparato!) qualcosa abbinando la teoria con la pratica, la chimica con l'elettronica... mixando semplicemente un paio di hobbies. Cosa si vuole di più?</p>
+            </div>
+          </article>
+
+          <nav class="article-nav" aria-label="Articoli precedente e successivo">
+            <a class="article-nav-link prev" href="181-intermezzo-messicano.html"><small>Precedente</small><strong>Intermezzo messicano</strong></a>
+            <a class="article-nav-link next" href="183-il-problema-del-vaso-poroso.html"><small>Successivo</small><strong>Il problema del vaso poroso</strong></a>
+          </nav>
+        </main>
+        <footer class="site-footer">
+  <p>Archivio statico di <strong>CHIMICA sperimentale</strong>, migrato da Libero Blog.</p>
+  <p><a href="../index.html">Home</a> · <a href="../archive.html">Archivio</a></p>
+</footer>
+
+
+        </body>
+        </html>

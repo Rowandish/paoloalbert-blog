@@ -1,0 +1,51 @@
+        <!doctype html>
+        <html lang="it">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Due steppers per Arduino · CHIMICA sperimentale</title>
+          <meta name="description" content="Dopo un po&#x27; che ci giocherello, il microcontrollore Arduino comincia a dare i primi frutti. Intanto ho capito quegli accidenti di punti e virgole e parentesi graffe del linguaggio C che...">
+          <link rel="stylesheet" href="../assets/style.css">
+
+        </head>
+        <body class="article-page">
+                <header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">PA</span>
+    <span>
+      <strong>CHIMICA sperimentale</strong>
+      <small>Esperienze in home-lab: considerazioni di chimica sperimentale e altro</small>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <a href="../index.html">Home</a>
+    <a href="../archive.html">Archivio</a>
+    <a href="https://blog.libero.it/paoloalbert/">Originale Libero</a>
+  </nav>
+</header>
+
+        <main class="article-shell">
+          <article class="article">
+            <header class="article-head">
+              <a class="back-link" href="../archive.html">Archivio</a>
+              <p class="article-meta">Post n. 271 · 24/03/2014 11:24 · <a href="https://blog.libero.it/paoloalbert/12704908.html">link originale</a></p>
+              <h1>Due steppers per Arduino</h1>
+            </header>
+            <div class="post-body">
+              <p style="text-align: justify;">Dopo un po' che ci giocherello, il microcontrollore <a href="265-arduino-piccola-grande-gloria-italiana.html" target="_blank">Arduino</a> comincia a dare i primi frutti.<br>Intanto ho capito quegli accidenti di punti e virgole e parentesi graffe del <span style="color: #ffff00;">linguaggio C</span> che subito mi avevano preso in contropiede, e questa è già una bella cosa.<br>Poi mi sono procurato due bei <span style="color: #00ff00;">motorini passo-passo</span> (stepper) per vedere se riuscivo a farli girare come volevo io, ovvero a totale piacimento di un programmatore ancora molto in erba.<br>Non solo ho visto che ci si riesce abbastanza facilmente ma che è anche molto divertente!<br>Come il solito rimando a Google per le informazioni approfondite su questo geniale tipo di motori "robotici", oggi usatissimi in tutti i servomeccanismi (esempio tipico nelle stampanti).<br>Quelli di cui parlo compiono un giro in 200 passi, quindi si muovono con la <span style="color: #ffffff;">risoluzione di 360/200=1,8 gradi</span>, indifferentemente sia in avanti che indietro e con velocità anche minime.<br>Esistono motori <span style="color: #ff99cc;">bipolari</span> (a 4 fili di comando) e <span style="color: #cc99ff;">unipolari</span> (a 5 o 6 fili) e la loro rotazione non avviene applicando una semplice tensione in corrente continua ai morsetti ma girano solo se pilotati con degli impulsi in fase opportuna forniti da specifici circuiti digitali.<br><span style="color: #00ffff;">Arduino</span> (fra le infinite altre sue possibilità) si presta perfettamente al pilotaggio di questi motori: basta dargli in pasto il giusto software e lui sputa fuori gli impulsi corretti... fasati, dritti, rovesci, lunghi o corti!<br><br>C'è solo il problema di <span style="color: #ff0000;">amplificare in corrente</span> questi segnali, perchè il piccoletto è in grado di fornire solo 40 mA per ogni porta di uscita, mentre il picco di corrente richiesto per gli avvolgimenti dei motori è molto più elevato.<br>Vi sono circuiti integrati specifici per questo problema, ma ho voluto risolverlo in maniera semplice ed economica <span style="color: #ffffff;">usando dei transistor darlington di potenza</span> (<span style="color: #ffffff;">BDX53C</span>) in un circuito semplicissimo, la cui realizzazione si vede in figura su basetta millefori e adatta a due motori.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/c1f39bde7f-B2BOWQcw_o.jpg" alt="Due steppers 1" width="350" height="263" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;">Ogni transistor (ne servono 4 per motore) è accompagnato da un <span style="color: #ffffff;">indispensabile diodo schottky</span> (<span style="color: #ffffff;">1N5819</span>) tra collettore ed emettitore per proteggerlo dalle sovratensioni e per regolarizzare il pilotaggio; i transistor non hanno bisogno (per piccoli motori) di dissipatore termico perchè lavorano in saturazione off-on e scaldano pochissimo.</p><p style="text-align: justify;">Sulla basetta entrano gli otto fili di comando più i due dell'alimentazione a 5 V per il motore (il negativo è in comune con Arduino) ed escono gli otto fili per gli avvolgimenti (più i quattro comuni positivi in parallelo, essendo in motori usati di tipo unipolare a sei fili).</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/5299dfa895-bSkxqPV1_o.jpg" alt="Due steppers" width="350" height="263" loading="lazy" decoding="async" /></p><p style="text-align: justify;"><br>Ecco il semplicissimo (ultrabanale per gli Arduiniani...) listato che ho scritto per provare la basetta, da caricare su <span style="color: #00ffff;">Arduino</span> con il <span style="color: #ff00ff;">compilatore IDE</span>.<br>Questo programmino fa girare alternativamente i due motorini in questo modo:<br><br>- <span style="color: #ffffff;">il primo in maniera del tutto casuale in un senso e nell'altro e in un range tra un minimo di 5 passi (9 gradi) e un massimo di 200 (un giro);</span><br>- <span style="color: #c0c0c0;">il secondo in avanti e di un solo passo alla volta (1,8 gradi)</span><br><br><span style="color: #ffff99;">#include   <br>int steps=200;<br>int pausa=100;<br>int velocita1=120;<br>int velocita2=10;<br>int passiMin=5;<br>int passiMax=200;<br>int steps1=0;<br>int steps2=1;<br>Stepper motore_1(steps,11,10,9,8);<br>Stepper motore_2(steps,7,6,5,4);<br><br>void setup() {<br>  <br>  randomSeed(analogRead(0)); <br>  motore_1.setSpeed(velocita1);<br>  motore_2.setSpeed(velocita2);<br>}<br> <br>void loop() {<br>  <br>  int casual_1=random(passiMin,passiMax);<br>  motore_1.step(casual_1);<br>  delay(pausa);<br>  motore_2.step(steps2);<br>  delay(pausa);<br>  motore_1.step(-casual_1);<br>  delay(pausa);<br>}</span><br><br>E' un piacere vedere come i motorini rispondono ai parametri forniti via software... e insistendo a guardarli nelle loro evoluzioni c'è solo il rischio di rimanere ipnotizzati.<br>E vien voglia di cambiare solo un paio di numeri nel listato per veder stravolta tutta la sequenza. In pratica si fa fare al giocattolino quello che si vuole.</p><p style="text-align: justify;"> </p>
+            </div>
+          </article>
+
+          <nav class="article-nav" aria-label="Articoli precedente e successivo">
+            <a class="article-nav-link prev" href="270-antenna-a-telaio-per-lf-e-vlf.html"><small>Precedente</small><strong>Antenna a telaio per LF e VLF</strong></a>
+            <a class="article-nav-link next" href="272-facciamo-la-lissia.html"><small>Successivo</small><strong>Facciamo la &quot;lissia&quot;?</strong></a>
+          </nav>
+        </main>
+        <footer class="site-footer">
+  <p>Archivio statico di <strong>CHIMICA sperimentale</strong>, migrato da Libero Blog.</p>
+  <p><a href="../index.html">Home</a> · <a href="../archive.html">Archivio</a></p>
+</footer>
+
+
+        </body>
+        </html>

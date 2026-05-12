@@ -1,0 +1,57 @@
+        <!doctype html>
+        <html lang="it">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>LCD Winstar 12864 A/J · CHIMICA sperimentale</title>
+          <meta name="description" content="Ogni tanto viene il turno di qualcosina di elettronico ed è quello che capita oggi. Questo post serve soprattutto a me, per ricordarmi un cablaggio particolare; se dovessi perdere degli...">
+          <link rel="stylesheet" href="../assets/style.css">
+
+        </head>
+        <body class="article-page">
+                <header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">PA</span>
+    <span>
+      <strong>CHIMICA sperimentale</strong>
+      <small>Esperienze in home-lab: considerazioni di chimica sperimentale e altro</small>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <a href="../index.html">Home</a>
+    <a href="../archive.html">Archivio</a>
+    <a href="https://blog.libero.it/paoloalbert/">Originale Libero</a>
+  </nav>
+</header>
+
+        <main class="article-shell">
+          <article class="article">
+            <header class="article-head">
+              <a class="back-link" href="../archive.html">Archivio</a>
+              <p class="article-meta">Post n. 314 · 05/04/2015 00:54 · <a href="https://blog.libero.it/paoloalbert/13168338.html">link originale</a></p>
+              <h1>LCD Winstar 12864 A/J</h1>
+            </header>
+            <div class="post-body">
+              <p style="text-align: justify;">Ogni tanto viene il turno di qualcosina di elettronico ed è quello che capita oggi.<br>Questo post serve soprattutto a me, per ricordarmi un cablaggio particolare; se dovessi perdere degli appunti so che qui di sicuro ritroverò quello che cerco.<br>Ma potrebbe servire anche a qualcun altro alle prese con le difficoltà e le perdite di tempo che ho avuto io; siccome i poteri concessi a San Google sono quasi infiniti, potrebbe darsi che quel qualcuno venga dirottato da queste parti, meravigliandosi di trovare in un blog una inaspettata scorciatoia per i suoi problemi.<br><br>Il fatto è che nell'unica fiera dell'elettronica (degna del titolo) rimasta in circolazione, ho preso tempo fa per 4 euro un bel <span style="color: #ffff00;">display grafico</span> da <span style="color: #ff0000;">8192 pixel</span> (128 colonne, 64 righe), ripromettendomi di giocarci un po' interfacciandolo con <span style="color: #00ccff;">Arduino</span>.<br>Gli esperti di questo magico microcontrollore non hanno certo bisogno degli appunti del sottoscritto... ma, come dicevo, scrivo soprattutto per me.<br>Il display in oggetto è spesso reperibile a prezzo ridicolo nelle cosiddette "fiere dell'elettronica", in mezzo ad un'accozzaglia di cineserie.<br>Si tratta del <span style="color: #00ff00;">WINSTAR WB12864 A/J</span>, a 22 pin anzichè i soliti 20, con due microchip grafici <span style="color: #ff99cc;">NT7108</span>.<br>Per il comando con <span style="color: #00ccff;">Arduino</span> ha bisogno delle librerie <span style="color: #ff9900;">GLCD.h</span> e <span style="color: #ff9900;">allFonts.h</span><br><br>Ecco il cablaggio da realizzare:<br><br><span style="color: #ffff00;">Pin del WB12864A/J</span>    <span style="color: #ff00ff;">Pin di Arduino</span><br><br><span style="color: #ffffff;">1    GND  ------------------    GND<br>2    +5V  ------------------    +5V<br>3    al pin 18 (contrasto)    <br>4    ------------------------    A3<br>5    ------------------------    A2<br>6    ------------------------    A4<br>7    ------------------------    8<br>8    ------------------------    6<br>9    ------------------------    10<br>10    ------------------------    11<br>11    ------------------------    4<br>12    ------------------------    5<br>13    ------------------------    6<br>14    ------------------------    7<br>15    ------------------------    A0<br>16    ------------------------    A1<br><span style="color: #ffffff;">17    ------------------------    reset</span><br>18    al pin 3<br>19    + 5V<br>20    220 ohm verso GND (LED rosso)<br>21    220 ohm verso GND (LED verde)<br>22    220 ohm verso GND (LED blu)</span><br><br>Collegato in questo modo il display funziona perfettamente, con i tre colori di retroilluminazione a scelta.</p><p style="text-align: justify;">In <span style="color: #00ccff;">Arduino UNO</span> rimangono a disposizione come IN/OUT solo i pin <span style="color: #ffcc99;">0,1,2,3,12,13,A5</span>, sufficienti per farci qualcos'altro.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/f56921b9be-QbVJTMvU_o.jpg" alt="LCD" width="400" height="300" loading="lazy" decoding="async" /></p><p style="text-align: justify;"><br>Le difficoltà (che ho incontrato io) sono che il modello J a 22 pin non è praticamente mai citato nelle ricerche in rete e che un errore nel cablaggio di uno dei circuiti sui quali mi ero basato mi ha fatto perdere parecchio tempo perchè le coordinate 0,0 anzichè corrispondere alla prima colonna/prima riga corrispondevano alla 60quattresima colonna (erano invertiti i pin A0 e A1 che corrispondono al comando dei due chip a bordo del display).<br><br><span style="color: #ffcc99;">Buon lavoro!</span></p>
+            </div>
+          </article>
+
+        <section class="comments" id="commenti">
+          <div class="section-kicker">Commenti importati</div>
+          <h2>2 commenti</h2>
+          <ol class="comments-list"><li class="comment depth-0"><div class="comment-meta"><span>Bepi1249</span></div><div class="comment-body">Riscontro un errore nel cablaggio, il pin 8 non va al pin 6 di arduino, ma va al 9</div><ol class="comments-list"><li class="comment depth-1 author-comment"><div class="comment-meta"><span>paoloalbert</span></div><div class="comment-body">Hallo Bepi, qualcuno che legge attentamente lo trovo sempre e mi fa piacere! Grazie della segnalazione e buon lavoro e buon proseguimento anche a te!</div></li></ol></li></ol>
+        </section>
+
+          <nav class="article-nav" aria-label="Articoli precedente e successivo">
+            <a class="article-nav-link prev" href="313-riposa-in-pace.html"><small>Precedente</small><strong>Riposa in pace</strong></a>
+            <a class="article-nav-link next" href="315-verso-le-dolomiti-con-la-740.html"><small>Successivo</small><strong>Verso le Dolomiti con la 740</strong></a>
+          </nav>
+        </main>
+        <footer class="site-footer">
+  <p>Archivio statico di <strong>CHIMICA sperimentale</strong>, migrato da Libero Blog.</p>
+  <p><a href="../index.html">Home</a> · <a href="../archive.html">Archivio</a></p>
+</footer>
+
+
+        </body>
+        </html>

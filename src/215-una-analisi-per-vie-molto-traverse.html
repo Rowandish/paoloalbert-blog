@@ -1,0 +1,51 @@
+        <!doctype html>
+        <html lang="it">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Una &quot;analisi&quot; per vie molto traverse... · CHIMICA sperimentale</title>
+          <meta name="description" content="Capita talvolta di giungere al risultato di un problema non per la via più diretta ma seguendo ragionamenti indiretti e magari macchinosi, che alla fine forniscono però il risultato...">
+          <link rel="stylesheet" href="../assets/style.css">
+
+        </head>
+        <body class="article-page">
+                <header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">PA</span>
+    <span>
+      <strong>CHIMICA sperimentale</strong>
+      <small>Esperienze in home-lab: considerazioni di chimica sperimentale e altro</small>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <a href="../index.html">Home</a>
+    <a href="../archive.html">Archivio</a>
+    <a href="https://blog.libero.it/paoloalbert/">Originale Libero</a>
+  </nav>
+</header>
+
+        <main class="article-shell">
+          <article class="article">
+            <header class="article-head">
+              <a class="back-link" href="../archive.html">Archivio</a>
+              <p class="article-meta">Post n. 215 · 16/01/2013 11:23 · <a href="https://blog.libero.it/paoloalbert/11851182.html">link originale</a></p>
+              <h1>Una &quot;analisi&quot; per vie molto traverse...</h1>
+            </header>
+            <div class="post-body">
+              <p style="text-align: justify;">Capita talvolta di giungere al risultato di un problema non per la via più diretta ma seguendo ragionamenti indiretti e magari macchinosi, che alla fine forniscono però il risultato cercato. <br>A volte questo metodo è l'unico disponibile, a volte lo si segue "per sfizio", come è capitato a me per  questa estemporanea "analisi" che vado a dire. <br>Come si vedrà, il metodo è talmente indiretto che sembra proprio tirato per i capelli. <br> <br>Tutto è nato da... una cassetta di deliziosissima <span style="color: #ffcc00;">uva Regina di Puglia</span> presa al mercato alla fine della scorsa estate. <br>Grani grossi e durissimi, un po' moscata, dolce come il miele, insomma un babbbà!</p><p style="text-align: justify;">L'insieme dei grappoloni (giganteschi) era circondato da un <span style="color: #99ccff;">nastro di plastica</span> trasparente; cosa succede tirando via il nastro?<br><span style="color: #ffffff;"><em>Mi viene l'insano proposito di definire il tipo di plastica con un metodo che ricorda da vicino il giro dell'oca! </em></span><br>Sì, assaggiando l'uva mi è venuto proprio questo proposito... vedete un po' con chi avete a che fare. <br> <br>Ho ragionato così: se con quel nastro di plastica costruisco un <span style="color: #c0c0c0;">CONDENSATORE</span> e ne riesco a misurare abbastanza precisamente la <span style="color: #339966;">capacità</span>, conoscendo la <span style="color: #ff0000;">superficie delle armature</span> e lo <span style="color: #ffff00;">spessore</span> della plastica stessa posso risalire alla <span style="color: #ff99cc;">costante dielettrica</span>... e da questa al materiale! <br>Detto fatto. <br> <br>Con un calibro centesimale ho misurato lo <span style="color: #ffff00;">spessore</span> del foglio: 18 centesimi di mm. <br>Con la pellicola di alluminio presa in cucina ho ritagliato due striscie da 48x11 cm (<span style="color: #ff0000;">528 cmq</span>) <br>Ho sovrapposto bene in maniera alternata i due ritagli di alluminio a due striscie leggermente più grandi di plastica ex uva ed ho avvolto il tutto strettamente, mettendo i due reofori di uscita, uno per armatura.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/b27422d9b2-3LoBanoz_o.jpg" alt="Condensatore 1" width="300" height="225" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;">Ecco fatto un bel condensatore per alta tensione, di capacità seguente:  <br> <br><span style="color: #ffffff;">C = ε S/d</span> , dove <span style="color: #339966;">C</span> è la capacità in pF, <span style="color: #ff0000;">S</span> la superficie delle armature in cmq, <span style="color: #ffff00;">d</span> la distanza in mm ed <span style="color: #ff99cc;">ε</span> la costante dielettrica. <br> <br>Se il dielettrico fosse aria (ε=1) la capacità sarebbe di <span style="color: #99cc00;">2933 pF</span>; per essere più precisi arrotondiamo ad un 1% in meno, stimando un non perfetto affacciamento delle armature tra di loro ed un non perfetto arrotolamento. Viene cosi una capacità più realistica di <span style="color: #339966;">2904 pF.<strong> </strong></span><br>Andiamo ora a misurare quella effettiva, <span style="color: #ffffff;">dato che il dielettrico non è aria</span>. <br> <br>Questo è un po' più complicato (ho detto che è come il giro dell'oca!), e presuppone un <span style="color: #ffffff;">oscilloscopio</span>, un <span style="color: #ffffff;">generatore di alta frequenza</span> ed una <span style="color: #ffffff;">induttanza di valore noto</span>. <br>Avendo naturalmente tutte e tre le cose (altrimenti che ci sto a fare con tutto questo discorso?) ho collegato in parallelo all'induttanza nota il condensatore ignoto formando il classico circuito LC parallelo.</p><p style="text-align: justify;"> </p><p><img src="../img/275d9806e8-hk4W4gbg_o.jpg" alt="Condensatore LC" width="170" height="170" loading="lazy" decoding="async" />     <img style="float: right;" src="../img/6dce6ca58d-1cz6eemh_o.jpg" alt="Condensatore 2" width="250" height="188" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;"><br><span style="text-decoration: underline;">Il circuito LC parallelo ha una sua precisa frequenza di risonanza</span>; accoppiando con un piccolo link questo circuito all'oscilloscopio ed al generatore, con la sintonia di quest'ultimo ho cercato la frequenza di risonanza (all'oscilloscopio si vede una sinusoide che improvvisamente aumenta molto di ampiezza).</p><p style="text-align: justify;">La frequenza di risonanza è stata trovata a <span style="color: #00ff00;">118 KHz</span>, su una induttanza nota di <span style="color: #ff00ff;">165 μH</span>. <br>Siamo a cavallo, basta una formuletta! <br> <br><span style="color: #ffffff;">C = 10<sup>12</sup>/4π<sup>2</sup>Lf<sup>2</sup> </span><br> <br>dove C è la capacità in <span style="color: #339966;">pF</span>, L l'induttanza in <span style="color: #ff00ff;">μH</span> ed f la frequenza in <span style="color: #00ff00;">KHz</span>. <br>Sostituendo i valori viene una capacità di <span style="color: #339966;">11025 pF</span>. <br> <br>Abbiamo visto che se il dielettrico fosse aria la capacità sarebbe 2904 pF, e che quella misurata col dielettrico ex uva è di 11025 pF: basta fare il rapporto e ci siamo! <br>11025/2904=3,80 <br> <br>Calcolato che <span style="color: #ff99cc;">3,80 è la costante dielettrica</span> del nostro foglio di plastica, basterà controllare una tabella delle costanti... et voila!  <br>Andiamo a prendere il Radio Handbook, che sentenzia: 3,2-3,9 per l<span style="color: #ffff99;"><strong>'</strong>acetato di cellulosa</span>... alleluja, proprio nel range! <br> <br>Il foglio (lo sapevo anche prima ma ho voluto giocare un po') è volgarissimo acetato, come quello per i lucidi di scuola. <br>Ora avete capito perchè ho titolato una "analisi" per vie MOLTO traverse"?</p>
+            </div>
+          </article>
+
+          <nav class="article-nav" aria-label="Articoli precedente e successivo">
+            <a class="article-nav-link prev" href="214-ancora-qualcosa-sul-tulio.html"><small>Precedente</small><strong>Ancora qualcosa sul Tulio</strong></a>
+            <a class="article-nav-link next" href="216-spiriti-chimici.html"><small>Successivo</small><strong>Spiriti chimici...</strong></a>
+          </nav>
+        </main>
+        <footer class="site-footer">
+  <p>Archivio statico di <strong>CHIMICA sperimentale</strong>, migrato da Libero Blog.</p>
+  <p><a href="../index.html">Home</a> · <a href="../archive.html">Archivio</a></p>
+</footer>
+
+
+        </body>
+        </html>

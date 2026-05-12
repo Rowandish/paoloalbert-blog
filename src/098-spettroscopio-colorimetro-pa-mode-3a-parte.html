@@ -1,0 +1,51 @@
+        <!doctype html>
+        <html lang="it">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Spettroscopio/colorimetro PA-mode (3Â° parte) · CHIMICA sperimentale</title>
+          <meta name="description" content="Dopo il lavoro di precisione abbastanza noioso ma indispensabile per la celletta, mi sono preso un po&#x27; più di soddisfazione con la progettazione e realizzazione del circuito. Cercherò di...">
+          <link rel="stylesheet" href="../assets/style.css">
+
+        </head>
+        <body class="article-page">
+                <header class="site-header">
+  <a class="brand" href="../index.html">
+    <span class="brand-mark">PA</span>
+    <span>
+      <strong>CHIMICA sperimentale</strong>
+      <small>Esperienze in home-lab: considerazioni di chimica sperimentale e altro</small>
+    </span>
+  </a>
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <a href="../index.html">Home</a>
+    <a href="../archive.html">Archivio</a>
+    <a href="https://blog.libero.it/paoloalbert/">Originale Libero</a>
+  </nav>
+</header>
+
+        <main class="article-shell">
+          <article class="article">
+            <header class="article-head">
+              <a class="back-link" href="../archive.html">Archivio</a>
+              <p class="article-meta">Post n. 98 · 17/04/2011 00:48 · <a href="https://blog.libero.it/paoloalbert/10122035.html">link originale</a></p>
+              <h1>Spettroscopio/colorimetro PA-mode (3Â° parte)</h1>
+            </header>
+            <div class="post-body">
+              <p style="text-align: justify;">Dopo il lavoro di precisione abbastanza noioso ma indispensabile per la celletta, mi sono preso un po' più di soddisfazione con la progettazione e realizzazione del circuito. <br>Cercherò di essere il più comprensibile possibile sapendo che l'elettronica non è  il motore trainante di questo blog, ma dopotutto questi sono appunti personali, è come un diario...<br><br>Ho imbastito un banale <span style="text-decoration: underline;">amplificatore in corrente continua</span> usando solo i <span style="color: #ff9900;">due amplificatori operazionali</span> contenuti in un circuito integrato <span style="color: #00ccff;">LM358</span>; il circuito è semplice perchè deve solo amplificare le debolissime variazioni di segnale che escono dal fototransistor rivelatore della celletta.</p><p style="text-align: justify;">Sottolineo che occorre amplificare non il segnale, ma le "<span style="color: #00ff00;">variazioni</span>" del segnale stesso a seconda della concentrazione, e queste variazioni possono essere debolissime, anche se il segnale in assoluto è forte.<span style="text-decoration: underline;"><br>Occorre quindi amplificare molto</span>, e stabilizzare bene la tensione duale di alimentazione.<br><br>Con due soli operazionali ho amplificato circa <span style="color: #ff00ff;">4000 volte in tensione</span> (ciò vuol dire che pochi microvolt di variazione nella tensione del rivelatore, portano alla variazione di parecchi millivolt in uscita dall'amplificatore).<br>L'interno della celletta deve essere al buio perfetto perchè la sensibilità alla luce del fototransistor così amplificato è elevatissima ed una minima trafilatura di luce ambientale porta immediatamente la lettura a fondo scala.<br>Non si può amplificare troppo (con circuiti così semplici) altrimenti aumenta troppo il noise di fondo e la lettura diventa instabile. Ho cercato quindi un giusto compromesso.<br><br>Il segnale amplificato del photoTR è stato prima testato solo sull'oscilloscopio (<span style="color: #808000;"><em>assolutamente indispensabile per lavoretti come questo</em></span>), successivamente ho adattato l'uscita su uno strumento analogico, prevedendo un adeguato fondo scala e gli azzeramenti indispensabili prima di ogni lettura.<br>E' stato previsto il controllo manuale del<strong> </strong><span style="color: #00ccff;">guadagno</span> dell'amplificatore e della <span style="color: #cc99ff;">corrente</span> <span style="color: #cc99ff;">di pilotaggio</span> dei LED.</p><p style="text-align: justify;"> </p><p style="text-align: center;"><img src="../img/237a524848-Cgg5Tt4v_o.jpg" alt="Colorimetro 1" width="350" height="263" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;">Nella foto si vede l'accrocco mentre è ancora in fase di progettazione, i componenti disassemblati belli distesi e pieni di fili <span style="color: #ffcc00;">come Frankestein</span>, che dà i primi segni di vita leggendo l'assorbimento di una soluzione di sali di rame. <br>L'alimentatore è quello grosso da lab, e se il circuitino fa i capricci, giù uno sculacc... pardon, uno scossone!</p><p style="text-align: justify;"> </p><p><img style="float: left;" src="../img/76069548b1-a2xjL73M_o.jpg" alt="Colorimetro acqua" width="210" height="158" loading="lazy" decoding="async" />   <img style="float: right;" src="../img/131c9eed5f-ZwjCD1Tt_o.jpg" alt="Colorimetro rame" width="210" height="158" loading="lazy" decoding="async" /></p><p style="text-align: justify;"> </p><p style="text-align: justify;"> </p><p style="text-align: justify;"> </p><p style="text-align: justify;"> </p><p style="text-align: justify;"> </p><p style="text-align: justify;"> </p><p style="text-align: justify;">Le prime prove all'oscilloscopio mostrano che l'apparecchio come principio funziona e sono quelle che mi danno la forza di continuare nella sperimentazione!<br><br><span style="color: #99cc00;"><em>Una soluzione di 2 g/l di cloruro di rame (adestra) mi fa alzare la traccia di 5 cm a luce visibile rispetto all'acqua pura (a sinistra)! Vuol dire che quando saremo nell'infrarosso...</em></span><br><br>Faccio notare per chiarezza che questo "colorimetro" NON è sensibile ai "colori" come noi li vediamo, ma <span style="color: #ff0000;">è sensibile all'assorbimento di certe lunghezze d'onda che attraversano una soluzione</span>: quest'ultima potrebbe essere perfettamente incolora come l'acqua e mostrare invece un fortissimo assorbimento; viceversa, potrebbe essere colorata anche intensamente e mostrare un assorbimento irrisorio rispetto a quello che ci si aspetterebbe!<br><br><em><span style="color: #ffcc99;">...ma di questo si parlerà la prossima volta.</span></em></p>
+            </div>
+          </article>
+
+          <nav class="article-nav" aria-label="Articoli precedente e successivo">
+            <a class="article-nav-link prev" href="097-spettroscopio-colorimetro-pa-mode-2a-parte.html"><small>Precedente</small><strong>Spettroscopio/colorimetro PA-mode (2Â° parte)</strong></a>
+            <a class="article-nav-link next" href="099-spettroscopio-colorimetro-pa-mode-4a-e-ultima-parte.html"><small>Successivo</small><strong>Spettroscopio/colorimetro PA-mode (4Â° e ultima parte)</strong></a>
+          </nav>
+        </main>
+        <footer class="site-footer">
+  <p>Archivio statico di <strong>CHIMICA sperimentale</strong>, migrato da Libero Blog.</p>
+  <p><a href="../index.html">Home</a> · <a href="../archive.html">Archivio</a></p>
+</footer>
+
+
+        </body>
+        </html>

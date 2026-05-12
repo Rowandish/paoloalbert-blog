@@ -1,0 +1,5 @@
+liberoblog_*.html
+liberoblog_posts_*.csv
+qa-*.png
+.preview-server.pid
+*.log
