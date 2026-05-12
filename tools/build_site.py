@@ -548,11 +548,7 @@ def render_post_card(post: Post, href: str, image_prefix: str, compact: bool = F
 
 def render_home(posts: list[Post]) -> str:
     latest = posts[:6]
-    image_posts = [post for post in posts if post.first_image][:4]
     total_comments = sum(count_comments(post.comments) for post in posts)
-    hero_images = "".join(
-        f'<img src="{post.first_image}" alt="" loading="eager" decoding="async">' for post in image_posts
-    )
     latest_cards = "\n".join(
         render_post_card(post, f"src/{post.filename}", "", compact=True) for post in latest
     )
@@ -570,7 +566,6 @@ def render_home(posts: list[Post]) -> str:
                 <a class="button" href="{ORIGINAL_BLOG}">Blog originale</a>
               </div>
             </div>
-            <div class="hero-gallery" aria-hidden="true">{hero_images}</div>
           </section>
 
           <section class="stats-band" aria-label="Statistiche archivio">
@@ -751,11 +746,30 @@ def write_css() -> None:
 
             .hero {
               min-height: min(760px, calc(100vh - 74px));
-              display: grid;
-              grid-template-columns: minmax(0, 52%) minmax(300px, 42%);
-              gap: clamp(28px, 5vw, 68px);
-              align-items: center;
+              position: relative;
+              display: flex;
+              align-items: flex-end;
+              overflow: hidden;
+              width: min(100vw, 100%);
+              margin: 0 auto 54px;
               padding: clamp(56px, 9vh, 96px) 0 42px;
+              background-image:
+                linear-gradient(90deg, rgba(10, 9, 8, .82) 0%, rgba(10, 9, 8, .46) 43%, rgba(10, 9, 8, .08) 100%),
+                linear-gradient(0deg, rgba(10, 9, 8, .72) 0%, rgba(10, 9, 8, .08) 46%, rgba(10, 9, 8, .42) 100%),
+                url("../img/hero-blog.jpg");
+              background-size: cover;
+              background-position: center right;
+              border-bottom: 1px solid rgba(255, 255, 255, .08);
+            }
+
+            .hero-copy {
+              width: min(720px, calc(100% - 48px));
+              margin-left: clamp(24px, 6vw, 74px);
+              padding: clamp(20px, 3vw, 34px);
+              background: rgba(12, 11, 10, .48);
+              border: 1px solid rgba(255, 255, 255, .13);
+              box-shadow: var(--shadow);
+              backdrop-filter: blur(6px);
             }
 
             .hero h1 {
@@ -765,12 +779,14 @@ def write_css() -> None:
               font-size: clamp(44px, 5.6vw, 78px);
               line-height: .95;
               font-weight: 700;
+              text-shadow: 0 4px 26px rgba(0, 0, 0, .75);
             }
 
             .hero-copy > p:not(.section-kicker) {
               max-width: 690px;
-              color: #dbcdbb;
+              color: #fff3df;
               font-size: clamp(18px, 2.2vw, 25px);
+              text-shadow: 0 2px 18px rgba(0, 0, 0, .8);
             }
 
             .section-kicker {
@@ -800,27 +816,6 @@ def write_css() -> None:
               border-color: rgba(95, 208, 163, .75);
               background: var(--accent);
               color: #102017;
-            }
-
-            .hero-gallery {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 12px;
-              align-items: stretch;
-            }
-
-            .hero-gallery img {
-              width: 100%;
-              min-height: 180px;
-              height: 100%;
-              object-fit: cover;
-              border: 1px solid rgba(255, 255, 255, .1);
-              box-shadow: var(--shadow);
-            }
-
-            .hero-gallery img:first-child {
-              grid-row: span 2;
-              min-height: 380px;
             }
 
             .stats-band {
@@ -1100,9 +1095,18 @@ def write_css() -> None:
             @media (max-width: 820px) {
               .site-header { position: static; align-items: flex-start; flex-direction: column; }
               .brand { min-width: 0; }
-              .hero { grid-template-columns: 1fr; min-height: 0; padding-top: 42px; }
-              .hero-gallery { grid-template-columns: repeat(2, 1fr); }
-              .hero-gallery img:first-child { grid-row: auto; min-height: 180px; }
+              .hero {
+                min-height: 620px;
+                padding-top: 42px;
+                background-image:
+                  linear-gradient(0deg, rgba(10, 9, 8, .86) 0%, rgba(10, 9, 8, .32) 58%, rgba(10, 9, 8, .58) 100%),
+                  url("../img/hero-blog.jpg");
+                background-position: center;
+              }
+              .hero-copy {
+                width: calc(100% - 24px);
+                margin: 0 12px;
+              }
               .stats-band { grid-template-columns: repeat(2, 1fr); }
               .section-heading { align-items: flex-start; flex-direction: column; }
               .article-nav { grid-template-columns: 1fr; }
@@ -1118,7 +1122,6 @@ def write_css() -> None:
               main, .article-shell, .site-footer { width: min(100% - 24px, 1180px); }
               .site-header { padding: 14px 12px; }
               .site-nav { justify-content: flex-start; }
-              .hero-gallery { grid-template-columns: 1fr; }
               .stats-band { grid-template-columns: 1fr; }
               .post-grid { grid-template-columns: 1fr; }
               .post-card { grid-template-rows: 160px 1fr; }
