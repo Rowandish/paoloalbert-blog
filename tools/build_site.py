@@ -36,6 +36,65 @@ AUTHOR = "paoloalbert"
 ORIGINAL_BLOG = "https://blog.libero.it/paoloalbert/"
 
 
+def _build_mojibake_map() -> dict[str, str]:
+    chars = [chr(codepoint) for codepoint in range(0x00A0, 0x0100)]
+    chars.extend(
+        [
+            "€",
+            "‚",
+            "ƒ",
+            "„",
+            "…",
+            "†",
+            "‡",
+            "ˆ",
+            "‰",
+            "Š",
+            "‹",
+            "Œ",
+            "Ž",
+            "‘",
+            "’",
+            "“",
+            "”",
+            "•",
+            "–",
+            "—",
+            "˜",
+            "™",
+            "š",
+            "›",
+            "œ",
+            "ž",
+            "Ÿ",
+        ]
+    )
+    mapping: dict[str, str] = {}
+    for char in chars:
+        try:
+            mapping[char.encode("utf-8").decode("latin-1")] = char
+        except UnicodeEncodeError:
+            continue
+    return dict(sorted(mapping.items(), key=lambda item: len(item[0]), reverse=True))
+
+
+MOJIBAKE_MAP = _build_mojibake_map()
+LEGACY_MOJIBAKE_MAP = {
+    "Â\x91": "'",
+    "Â\x92": "'",
+    "Â\x93": '"',
+    "Â\x94": '"',
+    "Â\x96": "-",
+    "Â\x97": "-",
+    "\x91": "'",
+    "\x92": "'",
+    "\x93": '"',
+    "\x94": '"',
+    "\x96": "-",
+    "\x97": "-",
+}
+
+
 @dataclass
 class Comment:
     comment_id: str
@@ -65,6 +124,20 @@ def read_latin1_with_optional_bom(path: Path) -> str:
     if data.startswith(b"\xef\xbb\xbf"):
         data = data[3:]
     return data.decode("latin-1")
+
+
+def repair_csv_text(value: str) -> str:
+    """Repair mixed CSV fields where UTF-8 bytes were decoded as Latin-1."""
+    if not value:
+        return ""
+    repaired = value
+    for bad, good in LEGACY_MOJIBAKE_MAP.items():
+        repaired = repaired.replace(bad, good)
+    for bad, good in MOJIBAKE_MAP.items():
+        repaired = repaired.replace(bad, good)
+    repaired = html.unescape(repaired)
+    repaired = repaired.replace("Â", "")
+    return repaired.replace("\xa0", " ").strip()
 
 
 def slugify(value: str, fallback: str) -> str:
@@ -101,12 +174,13 @@ def read_csv_posts() -> dict[str, Post]:
         if post_id not in posts:
             number = int(row["NUMERO"])
             date = datetime.strptime(row["DATA"], "%Y-%m-%d %H:%M:%S")
-            slug = slugify(row["TITOLO"], f"post-{number:03d}")
+            title = repair_csv_text(row["TITOLO"])
+            slug = slugify(title, f"post-{number:03d}")
             posts[post_id] = Post(
                 post_id=post_id,
                 number=number,
                 date=date,
-                title=row["TITOLO"],
+                title=title,
                 slug=slug,
                 filename=f"{number:03d}-{slug}.html",
             )
@@ -117,8 +191,8 @@ def read_csv_posts() -> dict[str, Post]:
                     comment_id=row["ID COMMENTO"],
                     parent_id=row.get("ID POST PADRE", "0") or "0",
                     level=int(row.get("LIVELLO COMMENTO", "0") or 0),
-                    author=row.get("AUTORE COMMENTO", "").strip() or "anonimo",
-                    text=row.get("COMMENTO", "").strip(),
+                    author=repair_csv_text(row.get("AUTORE COMMENTO", "")) or "anonimo",
+                    text=repair_csv_text(row.get("COMMENTO", "")),
                 )
             )
 
