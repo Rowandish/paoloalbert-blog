@@ -532,9 +532,10 @@ def render_post_card(post: Post, href: str, image_prefix: str, compact: bool = F
     )
     comments = count_comments(post.comments)
     class_name = "post-card compact" if compact else "post-card"
+    search_text = clean_text(f"{post.title} {post.excerpt} {post.number}").lower()
     return textwrap.dedent(
         f"""\
-        <article class="{class_name}" data-search="{html.escape((post.title + ' ' + post.excerpt).lower())}">
+        <article class="{class_name}" data-search="{html.escape(search_text)}">
           <a class="thumb" href="{href}" aria-hidden="true" tabindex="-1">{image}</a>
           <div class="post-card-body">
             <p class="post-card-meta">n. {post.number} · {post.date.strftime("%d/%m/%Y")}{' · ' + str(comments) + ' commenti' if comments else ''}</p>
@@ -575,6 +576,25 @@ def render_home(posts: list[Post]) -> str:
             <div><strong>2009-2020</strong><span>periodo</span></div>
           </section>
 
+          <section class="home-search" aria-label="Ricerca nel blog">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Cerca nel blog</p>
+                <h2>Trova un articolo</h2>
+              </div>
+              <a href="archive.html">Archivio completo</a>
+            </div>
+            <form class="search-box home-search-box" action="archive.html" role="search">
+              <span>Cerca</span>
+              <div class="search-row">
+                <input type="search" id="home-search" name="q" placeholder="ramatura, selenio, Biringuccio..." autocomplete="off">
+                <button class="button primary" type="submit">Cerca</button>
+              </div>
+            </form>
+            <p class="search-status" id="home-search-status" aria-live="polite" hidden></p>
+            <div class="post-grid search-results-grid" id="home-search-results" hidden></div>
+          </section>
+
           <section class="content-section">
             <div class="section-heading">
               <p class="section-kicker">Ultimi articoli</p>
@@ -594,6 +614,7 @@ def render_home(posts: list[Post]) -> str:
         description=SITE_SUBTITLE,
         body=body,
         css_href="assets/style.css",
+        js_href="assets/site.js",
         body_class="home-page",
     )
 
@@ -610,7 +631,7 @@ def render_archive(posts: list[Post]) -> str:
             <p>Ricerca per titolo o testo introduttivo. I link interni sono stati riscritti verso questa copia statica.</p>
             <label class="search-box">
               <span>Cerca</span>
-              <input type="search" id="archive-search" placeholder="ramatura, selenio, Biringuccio...">
+              <input type="search" id="archive-search" name="q" placeholder="ramatura, selenio, Biringuccio...">
             </label>
           </section>
           <section class="post-grid archive-grid" id="archive-grid">
@@ -803,13 +824,16 @@ def write_css() -> None:
             .button {
               display: inline-flex;
               align-items: center;
+              justify-content: center;
               min-height: 44px;
               padding: 10px 16px;
               border: 1px solid var(--line);
               color: var(--text);
               background: rgba(255, 255, 255, .04);
               text-decoration: none;
+              font: inherit;
               font-weight: 700;
+              cursor: pointer;
             }
 
             .button.primary {
@@ -845,6 +869,50 @@ def write_css() -> None:
               margin-top: 7px;
               color: var(--muted);
               font-size: 14px;
+            }
+
+            .home-search {
+              margin: 0 0 64px;
+              padding: clamp(22px, 4vw, 34px);
+              border: 1px solid var(--line);
+              background:
+                linear-gradient(135deg, rgba(95, 208, 163, .12), rgba(244, 127, 107, .08)),
+                rgba(36, 33, 29, .76);
+              box-shadow: 0 12px 28px rgba(0, 0, 0, .1);
+            }
+
+            .home-search .section-heading {
+              margin-bottom: 0;
+            }
+
+            .home-search-box {
+              margin-top: 18px;
+            }
+
+            .search-row {
+              display: flex;
+              align-items: stretch;
+              gap: 10px;
+              width: min(100%, 760px);
+            }
+
+            .search-row input {
+              flex: 1;
+              width: auto;
+            }
+
+            .search-row .button {
+              min-height: 48px;
+            }
+
+            .search-status {
+              margin: 16px 0 0;
+              color: var(--muted);
+              font-size: 14px;
+            }
+
+            .search-results-grid {
+              margin-top: 18px;
             }
 
             .content-section, .archive-shell {
@@ -1123,6 +1191,8 @@ def write_css() -> None:
               .site-header { padding: 14px 12px; }
               .site-nav { justify-content: flex-start; }
               .stats-band { grid-template-columns: 1fr; }
+              .search-row { flex-direction: column; }
+              .search-row .button { width: 100%; }
               .post-grid { grid-template-columns: 1fr; }
               .post-card { grid-template-rows: 160px 1fr; }
               .post-body, .article-head { padding: 22px; }
@@ -1137,14 +1207,141 @@ def write_js() -> None:
     (ASSETS_DIR / "site.js").write_text(
         textwrap.dedent(
             """\
-            const input = document.querySelector("#archive-search");
-            const cards = Array.from(document.querySelectorAll("[data-search]"));
+            const normalizeText = (value) =>
+              (value || "")
+                .toString()
+                .normalize("NFD")
+                .replace(/[\\u0300-\\u036f]/g, "")
+                .toLowerCase();
 
-            if (input) {
-              input.addEventListener("input", () => {
-                const query = input.value.trim().toLowerCase();
-                for (const card of cards) {
-                  card.hidden = query.length > 0 && !card.dataset.search.includes(query);
+            const archiveInput = document.querySelector("#archive-search");
+            const archiveCards = Array.from(document.querySelectorAll("[data-search]"));
+
+            function filterArchive() {
+              const query = normalizeText(archiveInput.value.trim());
+              for (const card of archiveCards) {
+                const haystack = normalizeText(card.dataset.search);
+                card.hidden = query.length > 0 && !haystack.includes(query);
+              }
+            }
+
+            if (archiveInput) {
+              const params = new URLSearchParams(window.location.search);
+              const initialQuery = params.get("q");
+              if (initialQuery) {
+                archiveInput.value = initialQuery;
+              }
+              archiveInput.addEventListener("input", filterArchive);
+              filterArchive();
+            }
+
+            const homeInput = document.querySelector("#home-search");
+            const homeResults = document.querySelector("#home-search-results");
+            const homeStatus = document.querySelector("#home-search-status");
+            let postsPromise;
+            let homeSearchRun = 0;
+
+            function loadPosts() {
+              if (!postsPromise) {
+                postsPromise = fetch("data/posts.json")
+                  .then((response) => (response.ok ? response.json() : []))
+                  .catch(() => []);
+              }
+              return postsPromise;
+            }
+
+            function createPostCard(post) {
+              const article = document.createElement("article");
+              article.className = "post-card compact";
+              article.dataset.search = normalizeText(post.search || `${post.title} ${post.excerpt}`);
+
+              const thumb = document.createElement("a");
+              thumb.className = "thumb";
+              thumb.href = post.path;
+              thumb.setAttribute("aria-hidden", "true");
+              thumb.tabIndex = -1;
+
+              if (post.image) {
+                const image = document.createElement("img");
+                image.src = post.image;
+                image.alt = "";
+                image.loading = "lazy";
+                image.decoding = "async";
+                thumb.append(image);
+              } else {
+                const placeholder = document.createElement("div");
+                placeholder.className = "thumb-placeholder";
+                const number = document.createElement("span");
+                number.textContent = post.number;
+                placeholder.append(number);
+                thumb.append(placeholder);
+              }
+
+              const body = document.createElement("div");
+              body.className = "post-card-body";
+
+              const meta = document.createElement("p");
+              meta.className = "post-card-meta";
+              meta.textContent = `n. ${post.number} · ${post.date_label}`;
+              if (post.comments) {
+                meta.textContent += ` · ${post.comments} commenti`;
+              }
+
+              const title = document.createElement("h2");
+              const link = document.createElement("a");
+              link.href = post.path;
+              link.textContent = post.title;
+              title.append(link);
+
+              const excerpt = document.createElement("p");
+              excerpt.textContent = post.excerpt || "";
+
+              body.append(meta, title, excerpt);
+              article.append(thumb, body);
+              return article;
+            }
+
+            async function renderHomeSearch() {
+              const run = ++homeSearchRun;
+              const query = normalizeText(homeInput.value.trim());
+              homeResults.replaceChildren();
+
+              if (!query) {
+                homeResults.hidden = true;
+                homeStatus.hidden = true;
+                return;
+              }
+
+              const posts = await loadPosts();
+              if (run !== homeSearchRun) {
+                return;
+              }
+
+              const matches = posts.filter((post) =>
+                normalizeText(post.search || `${post.title} ${post.excerpt}`).includes(query)
+              );
+              const visibleMatches = matches.slice(0, 12);
+
+              for (const post of visibleMatches) {
+                homeResults.append(createPostCard(post));
+              }
+
+              homeResults.hidden = visibleMatches.length === 0;
+              homeStatus.hidden = false;
+              if (matches.length === 0) {
+                homeStatus.textContent = "Nessun articolo trovato.";
+              } else if (matches.length > visibleMatches.length) {
+                homeStatus.textContent = `Primi ${visibleMatches.length} di ${matches.length} risultati.`;
+              } else {
+                homeStatus.textContent = `${matches.length} risultati.`;
+              }
+            }
+
+            if (homeInput && homeResults && homeStatus) {
+              homeInput.addEventListener("input", renderHomeSearch);
+              homeInput.form?.addEventListener("submit", (event) => {
+                if (!homeInput.value.trim()) {
+                  event.preventDefault();
                 }
               });
             }
@@ -1164,9 +1361,12 @@ def write_support_files(posts: list[Post]) -> None:
                     "number": post.number,
                     "title": post.title,
                     "date": post.date.isoformat(),
+                    "date_label": post.date.strftime("%d/%m/%Y"),
                     "path": f"src/{post.filename}",
                     "comments": count_comments(post.comments),
                     "image": post.first_image,
+                    "excerpt": post.excerpt,
+                    "search": clean_text(f"{post.title} {post.excerpt} {post.number}"),
                 }
                 for post in posts
             ],
